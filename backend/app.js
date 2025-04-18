@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 
 // Use model mongoose for save thing.js in bdd
 const Thing = require("./models/thing");
+const thing = require("./models/thing");
 
 // Connection server mongodb
 mongoose
@@ -45,6 +46,21 @@ app.post("/api/stuff", (req, res, next) => {
     .catch((error) =>
       res.status(400).json({ message: `erreur post : ${error} ` })
     );
+});
+
+/////////////////////////////////////////////////// method CRUD : create, read, update, delete
+// Delete article
+app.delete("/api/stuff/:id", (req, res, next) => {
+  Thing.deleteOne({ _id: req.params.id })
+    .then(() => res.status(200).json({ message: "Object delete !" }))
+    .catch((error) => res.status(400).json({ error }));
+});
+
+// change article
+app.put("/api/stuff/:id", (req, res, next) => {
+  Thing.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+    .then(() => res.status(200).json({ message: "Object change !" }))
+    .catch((error) => res.status(400).json({ error }));
 });
 
 // display page article
